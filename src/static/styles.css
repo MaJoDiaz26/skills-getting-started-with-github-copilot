@@ -148,8 +148,8 @@ footer {
 }
 
 .participants-list {
-  list-style: disc;
-  padding-left: 20px;
+  list-style: none;
+  padding-left: 0;
   margin-top: 8px;
   margin-bottom: 0;
   max-height: 6em;
@@ -157,10 +157,27 @@ footer {
 }
 
 .participant-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   padding: 3px 0;
   color: #333;
   font-size: 0.95rem;
 }
+
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: #c62828;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.remove-btn:hover {
+  background: rgba(198,40,40,0.08);
 
 .participant-muted {
   color: #777;
