@@ -142,3 +142,28 @@ footer {
   padding: 20px;
   color: #666;
 }
+
+.participants {
+  margin-top: 10px;
+}
+
+.participants-list {
+  list-style: disc;
+  padding-left: 20px;
+  margin-top: 8px;
+  margin-bottom: 0;
+  max-height: 6em;
+  overflow: auto;
+}
+
+.participant-item {
+  padding: 3px 0;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.participant-muted {
+  color: #777;
+  font-style: italic;
+  padding: 3px 0;
+}
