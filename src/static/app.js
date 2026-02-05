@@ -20,14 +20,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        // Build participants list HTML (no bullets) with remove buttons
+        const participantsHtml =
+          details.participants && details.participants.length
+            ? details.participants.map((p) => `<li class="participant-item"><span class="participant-email">${p}</span><button class="remove-btn" data-activity="${name}" data-email="${p}" title="Unregister">✖</button></li>`).join("")
+            : `<li class="participant-muted">No participants yet</li>`;
+
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <div class="participants">
+            <strong>Participants:</strong>
+            <ul class="participants-list">
+              ${participantsHtml}
+            </ul>
+          </div>
         `;
 
         activitiesList.appendChild(activityCard);
+
+        // Attach unregister handlers for remove buttons
+        activityCard.querySelectorAll(".remove-btn").forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
+            const activityName = btn.dataset.activity;
+            const email = btn.dataset.email;
+            if (!confirm(`Unregister ${email} from ${activityName}?`)) return;
+            try {
+              const resp = await fetch(`/activities/${encodeURIComponent(activityName)}/unregister?email=${encodeURIComponent(email)}`, { method: "DELETE" });
+              const resJson = await resp.json();
+              if (resp.ok) {
+                const li = btn.closest("li");
+                if (li) li.remove();
+                fetchActivities();
+              } else {
+                messageDiv.textContent = resJson.detail || resJson.message || "Failed to unregister";
+                messageDiv.className = "error";
+                messageDiv.classList.remove("hidden");
+                setTimeout(()=> messageDiv.classList.add("hidden"),5000);
+              }
+            } catch (err) {
+              console.error("Error unregistering:", err);
+            }
+          });
+        });
 
         // Add option to select dropdown
         const option = document.createElement("option");
